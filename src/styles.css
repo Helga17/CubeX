@@ -1,0 +1,54 @@
+.App {
+  margin-top: 40px;
+  margin-left: 50px;
+}
+
+.block {
+  width: 100%;
+}
+
+.tasks {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  position: relative;
+}
+
+.buttons {
+  padding-left: 40px;
+}
+
+button {
+  border: none;
+  padding: 4px;
+  color: #fff;
+  border-radius: 20%;
+}
+
+.remove {
+  background-color: rgb(206, 7, 7);
+}
+
+.btn-add {
+  background-color: rgb(1, 172, 24);
+}
+
+.btn-move button {
+  margin-left: 5px;
+  margin-right: 3px;
+  background-color: rgb(241, 97, 0);
+}
+
+.under {
+  margin: 10px 0;
+}
+
+.under-task {
+  width: 100%;
+}
+
+.inner {
+  margin-top: 30px;
+}
