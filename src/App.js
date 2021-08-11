@@ -1,144 +1,76 @@
-import { useState } from "react";
-import "./styles.css";
+import { useState } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import TodoList from './components/TodoList';
+import './App.css';
 
-const App = () => {
-  let [task, setTask] = useState("");
-  let [subTasks, setSubTasks] = useState({});
-  const [dataTasks, setDataTasks] = useState([]);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [inputState, setInputState] = useState({});
+function App() {
+  const [list, setList] = useState([])
 
-  const inputChange = (event) => {
-    setTask(event.target.value);
-  };
+  const addListItem = (id, task, list) => {
+     if(!!id){
+        return list.map(todo => {
+          if (todo.id === id){
+            todo.collection.push({id: Date.now(), task, collection: [], parentId: id });
+            return todo;
+          } else return {...todo, collection: [...addListItem(id, task, todo.collection)]};
+        })
+      } else {
+        return [...list, {id: Date.now(), task, collection: [], parentId: null}];
+      }
+  }
 
-  const inputChangeSubTask = (event, index) => {
-    let clonedSubTasks = { ...subTasks };
-    clonedSubTasks[index] = event.target.value;
+  const addItem = (id = null, item) => {
+    setList((list) => [...addListItem(id, item, list)]);
+  }
 
-    setSubTasks(clonedSubTasks);
-  };
 
-  const onSubmit = () => {
-    if (task) {
-      task = {
-        message: task,
-        collection: []
-      };
-      dataTasks.push(task);
-    }
-    setTask("");
-    return dataTasks;
-  };
+  const removeListItem = (id, todoItems) => {
+    return todoItems.filter(todo => {
+      if(todo.id === id) {
+        return false;
+      } else {
+        todo.collection = removeListItem(id, todo.collection)
+        return true;
+      }
+    })
+  } 
 
-  const onRemove = (index) => {
-    const newDataTasks = [...dataTasks];
-    newDataTasks.splice(index, 1);
-    setDataTasks(newDataTasks);
-  };
+  const removeItem = (id) => {
+    setList((list) => [...removeListItem(id, list)])
+  }
 
-  const onMoveUp = (index) => {
-    let clonedArray = [...dataTasks];
-    let temporary = clonedArray[index];
-    clonedArray[index] = clonedArray[index - 1];
-    clonedArray[index - 1] = temporary;
-    setDataTasks(clonedArray);
-  };
+  // const onMoveUpItem = (id, index, todoItems) => {
+  //   console.log(id)
+  //   // let clonedArray = [...todoItems];
+  //   // let findIndex = null;
 
-  const onMoveDown = (index) => {
-    let clonedArray = [...dataTasks];
-    let temporary = clonedArray[index];
-    clonedArray[index] = clonedArray[index + 1];
-    clonedArray[index + 1] = temporary;
-    setDataTasks(clonedArray);
-  };
+  //   // for (let item of clonedArray) {
+  //   //  console.log(item)
+  //   // }
+  //   //
+  // }
 
-  const handleClick = (index) => {
-    let clonedInputState = { ...inputState };
+ 
 
-    if (!clonedInputState.hasOwnProperty(index)) {
-      clonedInputState[index] = true;
-    } else {
-      clonedInputState[index] = !clonedInputState[index];
-    }
+  const onMoveDown = (id, index) => {
 
-    setInputState(clonedInputState);
-  };
+  }
 
-  const onSubmitSubTask = (index) => {
-    let clonedSubTasks = { ...subTasks };
-    if (subTasks) {
-      dataTasks[index].collection.push(subTasks[index]);
-    }
 
-    clonedSubTasks[index] = "";
-    setSubTasks(clonedSubTasks);
-
-    return dataTasks[index].collection;
-  };
-
-  const taskElements = dataTasks.map((item, index) => {
-    return (
-      <ul className="tasks">
-        <li key={index} index={index}>
-          {item.message}
-          {dataTasks[index].collection.map((task, index) => {
-            return (
-              <ul key={index}>
-                <li>{task}</li>
-              </ul>
-            );
-          })}
-        </li>
-        <div className="buttons">
-          <button className="remove" onClick={() => onRemove(index)}>
-            X
-          </button>
-          <span className="btn-move">
-            {index !== 0 ? (
-              <button onClick={() => onMoveUp(index)}>Up</button>
-            ) : null}
-            {index !== dataTasks.length - 1 ? (
-              <button onClick={() => onMoveDown(index)}>Down</button>
-            ) : null}
-          </span>
-          <div className="under">
-            <button className="btn-add" onClick={() => handleClick(index)}>
-              Add +
-            </button>
-            {inputState[index] && (
-              <div className="under-task">
-                <input
-                  type="text"
-                  onChange={(event) => inputChangeSubTask(event, index)}
-                  value={subTasks[index]}
-                />
-                <button
-                  className="btn-add"
-                  onClick={() => onSubmitSubTask(index)}
-                >
-                  OnSubmit
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </ul>
-    );
-  });
   return (
-    <div className="App">
-      <div className="block">
-        <div className="content">{taskElements}</div>
-        <div className="inner">
-          <input type="text" onChange={inputChange} value={task} />
-          <button className="btn-add" onClick={() => onSubmit()}>
-            Add
-          </button>
-        </div>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Switch>
+        <Route path='/' exact>
+          <div className="container">
+            <h1>TodoList</h1>
+            <TodoList todoItems={list} setItems={addItem} remove={removeItem} setList={setList}
+            // onMoveUp={onMoveUpItem} 
+            onMoveDown={onMoveDown} />
+          </div>
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
-};
+}
 
 export default App;

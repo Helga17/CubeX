@@ -8,9 +8,9 @@ const Input = ({addTask, id}) => {
     }
 
     return(
-       <span>
-            <input type="text" onChange={inputChange} value={task} />
-            <button onClick={() => {addTask(task, id); setTask('');}}>+</button>
+       <span className="form">
+            <input className="input" type="text" onChange={inputChange} value={task} placeholder="Add your task..." />
+            <button className="btn-add" onClick={() => {addTask(task, id); setTask('');}}>+</button>
        </span>
     )
 }
