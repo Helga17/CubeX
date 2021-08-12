@@ -1,10 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import TodoList from './components/TodoList';
 import './App.css';
 
 function App() {
-  const [list, setList] = useState([])
+  const [list, setList] = useState([]);
+  const [firstLoad, setFirstLoad] = useState([]);
+
+  useEffect(() => {
+    if(firstLoad){
+      setFirstLoad(false) 
+      setList(() => JSON.parse(localStorage.getItem('list')));
+    }else{
+      localStorage.setItem('list', JSON.stringify(list || []));
+    }
+  },[list])
 
   const addListItem = (id, task, list) => {
      if(!!id){
@@ -29,14 +39,14 @@ function App() {
       if(todo.id === id) {
         return false;
       } else {
-        todo.collection = removeListItem(id, todo.collection)
+        todo.collection = removeListItem(id, todo.collection);
         return true;
       }
     })
   } 
 
   const removeItem = (id) => {
-    setList((list) => [...removeListItem(id, list)])
+    setList((list) => [...removeListItem(id, list)]);
   }
 
   const findById = (data, itemId) => {
@@ -55,7 +65,7 @@ function App() {
     return false;
   };
 
-  const onMoveUpItem = (id, parentId) => {
+  const onUp = (id, parentId) => {
     let clonedArray = [...list];
     if (parentId) {
       let desiredItem = findById(clonedArray, parentId);
@@ -73,15 +83,10 @@ function App() {
         clonedArray[index - 1] = findTask;
       }
     }
-    
-    return clonedArray;
+    setList(clonedArray);
   }
 
-  const onUp = (id, parentId) => {
-    setList((list) => [...onMoveUpItem(id, parentId, list)]);
-  }
-
-  const onMoveDownItem = (id, parentId) => {
+  const onDown = (id, parentId) => {
     let clonedArray = [...list];
     if (parentId) {
       let desiredItem = findById(clonedArray, parentId);
@@ -99,11 +104,7 @@ function App() {
           clonedArray[index + 1] = findTask;
         }
     }
-    return clonedArray;
-  }
-
-  const onDown = (id, parentId) => {
-    setList((list) => [...onMoveDownItem(id, parentId, list)]);
+    setList(clonedArray);
   }
 
   return (
