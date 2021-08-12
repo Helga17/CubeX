@@ -1,11 +1,15 @@
 import React from 'react';
 
-const Buttons = ({onDelete, onUp, onDown, id, index, parentId}) => {
+const Buttons = ({onDelete, onMoveUp, onMoveDown, id,parentId, item, first, last}) => {
     return (
         <span className="buttons">
-            <button onClick={()=> onUp(id, parentId)}><i className='fas fa-angle-up'></i></button>
-            <button onClick={()=> onDown(id, index)}><i className='fas fa-angle-down'></i></button>
-            <button onClick={()=> onDelete(id, index)}>X</button>
+
+            {item &&
+            <span>
+                {!first && <button onClick={()=> onMoveUp(id, parentId)}><i className='fas fa-angle-up'></i></button>}
+                {!last && <button onClick={()=> onMoveDown(id, parentId)}><i className='fas fa-angle-down'></i></button>}
+            </span>}
+            <button onClick={()=> onDelete(id)}>X</button>
         </span>
     )
 }

@@ -1,107 +1,69 @@
-/* *{
-  padding: 0;
-  margin: 0;
-}
-
 .container {
   width: 100%;
-  height: 100vh;
-  position: relative;
+  max-width: 700px;
+  min-height: 400px;
+  background-color: #85b7a7;
+  border-radius: 30px;
+  padding: 10px;
+  overflow: hidden;
 }
 
-.main {
-  width: 650px;
-  padding: 40px 20px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
-  background-color: #355c7d;
-  color: #fff;
-}
-
-.block .title{
-  text-align: center;
-  margin-bottom: 40px;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.fill-data {
-  position: relative;
+.container h1 {
   text-align: center;
 }
 
-.fill-data input {
-  width: 300px;
-  margin: 0 auto;
-  padding: 3px;
+.form {
+  position: relative;
 }
 
-input:focus{
+.input {
+  padding: 2px;
+  border-radius: 20px;
+  border: 1px solid #649182;
+}
+
+.input:focus {
   outline: none;
 }
 
 .btn-add {
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background: transparent;
   position: absolute;
   top: 0px;
-  right: 174px;
-  padding: 3px;
-  border: none;
-  background: transparent;
-  font-size: 18px;
+  right: 0;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.content {
-  width: 90%;
-  margin-top: 20px;
-  padding: 10px 40px;
-  position: relative;
+.btn-add:hover{
+  background: #e7e7e7;
+  transition: all 0.3s ease;
 }
 
-.tasks li {
-  line-height: 1.5;
+.todolist li {
+  margin: 10px 0;
+  list-style-type: square;
 }
 
-.subtasks {
+.buttons {
   margin-left: 10px;
 }
 
-.remove-task,
-.remove-subtask {
-  position: absolute;
-  right: 60px;
-  background: white;
-  border: none;
-  padding: 2px;
+.buttons button{
   border-radius: 10px;
-}
-
-.btn-show {
-  margin-top: 5px;
-  background: #fff;
-  border: none;
-  padding: 3px 10px;
-  border-radius: 10px;
-}
-
-.subtask {
-  position: relative;
-}
-
-.subtask input{
-  margin: 5px 0;
-}
-
-.btn-add-subtask {
-  position: absolute;
-  padding: 1px 4px;
-  top: 5px;
-  left: 163px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
+  border: 1px solid #ccc;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  font-size: 15px;
   font-weight: 700;
-} */
+  padding: 0px 6px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.buttons button:hover {
+  background: #defaf1;
+  transition: all 0.3s ease;
+}

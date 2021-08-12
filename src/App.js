@@ -39,23 +39,72 @@ function App() {
     setList((list) => [...removeListItem(id, list)])
   }
 
-  // const onMoveUpItem = (id, index, todoItems) => {
-  //   console.log(id)
-  //   // let clonedArray = [...todoItems];
-  //   // let findIndex = null;
+  const findById = (data, itemId) => {
+    for (let item of data) {
+      if (item.id === itemId) {
+        return item;
+      }
 
-  //   // for (let item of clonedArray) {
-  //   //  console.log(item)
-  //   // }
-  //   //
-  // }
+      if(item.collection) {
+        let desiredItem = findById(item.collection, itemId);
+        if (desiredItem) {
+          return desiredItem;
+        }
+      }
+    }
+    return false;
+  };
 
- 
-
-  const onMoveDown = (id, index) => {
-
+  const onMoveUpItem = (id, parentId) => {
+    let clonedArray = [...list];
+    if (parentId) {
+      let desiredItem = findById(clonedArray, parentId);
+      let index = desiredItem.collection.findIndex((task) => task.id === id);
+      if (index > 0) {
+        let tmp = desiredItem.collection[index];
+        desiredItem.collection[index] = desiredItem.collection[index - 1];
+        desiredItem.collection[index - 1] = tmp;
+      }
+    } else {
+      let index = clonedArray.findIndex((task) => task.id === id);
+      if (index > 0) {
+        let findTask = clonedArray[index];
+        clonedArray[index] = clonedArray[index - 1];
+        clonedArray[index - 1] = findTask;
+      }
+    }
+    
+    return clonedArray;
   }
 
+  const onUp = (id, parentId) => {
+    setList((list) => [...onMoveUpItem(id, parentId, list)]);
+  }
+
+  const onMoveDownItem = (id, parentId) => {
+    let clonedArray = [...list];
+    if (parentId) {
+      let desiredItem = findById(clonedArray, parentId);
+      let index = desiredItem.collection.findIndex((task) => task.id === id);
+        if (index !== desiredItem.collection.length - 1) {
+          let tmp = desiredItem.collection[index];
+          desiredItem.collection[index] = desiredItem.collection[index + 1];
+          desiredItem.collection[index + 1] = tmp;
+        }
+    } else {
+      let index = clonedArray.findIndex((task) => task.id === id);
+        if(index !== clonedArray.length - 1) {
+          let findTask = clonedArray[index];
+          clonedArray[index] = clonedArray[index + 1];
+          clonedArray[index + 1] = findTask;
+        }
+    }
+    return clonedArray;
+  }
+
+  const onDown = (id, parentId) => {
+    setList((list) => [...onMoveDownItem(id, parentId, list)]);
+  }
 
   return (
     <BrowserRouter>
@@ -64,8 +113,8 @@ function App() {
           <div className="container">
             <h1>TodoList</h1>
             <TodoList todoItems={list} setItems={addItem} remove={removeItem} setList={setList}
-            // onMoveUp={onMoveUpItem} 
-            onMoveDown={onMoveDown} />
+            onUp={onUp} 
+            onDown={onDown} />
           </div>
         </Route>
       </Switch>
